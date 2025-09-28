@@ -1,7 +1,7 @@
 from mcp.server.fastmcp import FastMCP
 
 # Khởi tạo server
-mcp = FastMCP("info", host="0.0.0.0", port=8000)
+mcp = FastMCP("info")
 
 @mcp.tool()
 def get_info(name: str):
