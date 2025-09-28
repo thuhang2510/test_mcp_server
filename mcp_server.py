@@ -28,6 +28,6 @@ def get_people_family(name: str):
         }
     return "Không có dữ liệu được lưu trữ"
 
-if __name__ == "__main__":
-    # Chỉ cần run trực tiếp, FastMCP Cloud sẽ quản lý asyncio loop
-    mcp.run(transport="sse")
+# if __name__ == "__main__":
+#     # Chỉ cần run trực tiếp, FastMCP Cloud sẽ quản lý asyncio loop
+#     mcp.run(transport="sse")
