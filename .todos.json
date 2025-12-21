@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Create feature branch for adding get_age tool",
+    "status": "completed",
+    "activeForm": "Creating feature branch"
+  },
+  {
+    "content": "Add get_age tool to mcp_server.py that returns age based on name",
+    "status": "completed",
+    "activeForm": "Adding get_age tool"
+  },
+  {
+    "content": "Test the new tool by running server and client",
+    "status": "completed",
+    "activeForm": "Testing get_age tool"
+  },
+  {
+    "content": "Commit changes with conventional commit message",
+    "status": "in_progress",
+    "activeForm": "Committing changes"
+  },
+  {
+    "content": "Push branch and create Pull Request",
+    "status": "pending",
+    "activeForm": "Pushing and creating PR"
+  }
+]
