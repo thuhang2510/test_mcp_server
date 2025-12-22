@@ -28,6 +28,33 @@ def get_people_family(name: str):
         }
     return "Không có dữ liệu được lưu trữ"
 
+@mcp.tool()
+def get_age(name: str):
+    """
+    Get age of a person by name
+    """
+    if "hang" in name.lower():
+        return {
+            "name": name,
+            "age": 18
+        }
+    elif "dam vt" in name.lower():
+        return {
+            "name": name,
+            "age": 45
+        }
+    elif "la tt" in name.lower():
+        return {
+            "name": name,
+            "age": 43
+        }
+    elif "dam hg" in name.lower():
+        return {
+            "name": name,
+            "age": 20
+        }
+    return "Không có dữ liệu được lưu trữ"
+
 # if __name__ == "__main__":
 #     # Chỉ cần run trực tiếp, FastMCP Cloud sẽ quản lý asyncio loop
 #     mcp.run(transport="sse")
