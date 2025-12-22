@@ -16,12 +16,12 @@
   },
   {
     "content": "Commit changes with conventional commit message",
-    "status": "in_progress",
+    "status": "completed",
     "activeForm": "Committing changes"
   },
   {
     "content": "Push branch and create Pull Request",
-    "status": "pending",
+    "status": "in_progress",
     "activeForm": "Pushing and creating PR"
   }
 ]
