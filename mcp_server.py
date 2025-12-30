@@ -28,6 +28,19 @@ def get_people_family(name: str):
         }
     return "Không có dữ liệu được lưu trữ"
 
+@mcp.tool()
+def get_contact_info(name: str):
+    """
+    Get contact information including: phone, email, address
+    """
+    if "hang" in name.lower():
+        return {
+            "phone": "0123456789",
+            "email": "hang@example.com",
+            "address": "Hanoi, Vietnam"
+        }
+    return "Không có dữ liệu được lưu trữ"
+
 # if __name__ == "__main__":
 #     # Chỉ cần run trực tiếp, FastMCP Cloud sẽ quản lý asyncio loop
 #     mcp.run(transport="sse")
