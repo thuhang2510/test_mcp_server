@@ -1,6 +1,8 @@
 import unittest
+from datetime import datetime
 
 from mcp_server import (
+    get_current_time,
     parse_birthday_day_month,
     zodiac_from_birthday,
     zodiac_info_from_birthday,
@@ -46,6 +48,15 @@ class TestZodiacNumber(unittest.TestCase):
     def test_unknown_on_invalid_input(self):
         self.assertEqual(zodiac_from_birthday("31/04"), "Không rõ")
         self.assertIsNone(zodiac_number_from_birthday("31/04"))
+
+    def test_get_current_time_output(self):
+        out = get_current_time(tz="UTC")
+        self.assertIn("current_time", out)
+        self.assertIn("iso", out)
+        self.assertIn("timezone", out)
+
+        # ISO string phải parse được
+        datetime.fromisoformat(out["iso"])
 
 
 if __name__ == "__main__":

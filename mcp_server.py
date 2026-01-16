@@ -1,7 +1,14 @@
 from mcp.server.fastmcp import FastMCP
 import random
 import re
+from datetime import datetime
 from typing import List, Optional
+
+try:
+    # Python 3.9+
+    from zoneinfo import ZoneInfo  # type: ignore
+except Exception:  # pragma: no cover
+    ZoneInfo = None  # type: ignore
 
 # Khởi tạo server
 mcp = FastMCP("info")
@@ -469,6 +476,38 @@ def get_compatibility(name_a: str, name_b: str):
         "compatibility_score": score,
         "note": note,
         "lucky_color": lucky_color,
+    }
+
+
+@mcp.tool()
+def get_current_time(tz: str = "Asia/Ho_Chi_Minh", fmt: str = "%Y-%m-%d %H:%M:%S"):
+    """Lấy giờ hiện tại.
+
+    Args:
+        tz: Timezone IANA (vd: "Asia/Ho_Chi_Minh"). Nếu môi trường không hỗ trợ
+            `zoneinfo` hoặc timezone không hợp lệ, sẽ fallback sang giờ local.
+        fmt: Định dạng theo datetime.strftime.
+
+    Returns:
+        Dict gồm current_time (theo fmt) và iso (ISO-8601).
+    """
+
+    now: datetime
+
+    if ZoneInfo is not None:
+        try:
+            now = datetime.now(ZoneInfo(tz))
+        except Exception:
+            now = datetime.now().astimezone()
+            tz = str(now.tzinfo) if now.tzinfo else tz
+    else:  # pragma: no cover
+        now = datetime.now().astimezone()
+        tz = str(now.tzinfo) if now.tzinfo else tz
+
+    return {
+        "timezone": tz,
+        "current_time": now.strftime(fmt),
+        "iso": now.isoformat(),
     }
 
 
