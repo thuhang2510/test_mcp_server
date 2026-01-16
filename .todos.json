@@ -1,22 +1,17 @@
 [
   {
-    "content": "Review current MCP server tools and data handling",
+    "content": "Xem lại chức năng hiện có liên quan gia đình và vị trí bổ sung tool mới",
     "status": "completed",
-    "activeForm": "Reviewing current MCP server tools and data handling"
+    "activeForm": "Đang xem lại chức năng hiện có liên quan gia đình và vị trí bổ sung tool mới"
   },
   {
-    "content": "Design and add richer person profiles with extra tools (profile, random, compatibility)",
+    "content": "Thêm tool lấy thông tin gia đình chi tiết vào mcp_server.py",
     "status": "completed",
-    "activeForm": "Designing and adding richer person profiles with extra tools"
+    "activeForm": "Đang thêm tool lấy thông tin gia đình chi tiết vào mcp_server.py"
   },
   {
-    "content": "Update server implementations to use shared data + helpers",
+    "content": "Kiểm tra nhanh logic trả về và cập nhật mô tả tool",
     "status": "completed",
-    "activeForm": "Updating server implementations to use shared data + helpers"
-  },
-  {
-    "content": "Sanity-check client compatibility and summarize changes",
-    "status": "completed",
-    "activeForm": "Sanity-checking client compatibility and summarizing changes"
+    "activeForm": "Đang kiểm tra nhanh logic trả về và cập nhật mô tả tool"
   }
 ]

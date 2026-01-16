@@ -116,6 +116,20 @@ def build_profile(name: str):
     }
 
 
+def build_basic_profile(name: str):
+    person = PEOPLE[name]
+    zodiac = zodiac_from_birthday(person["birthday"])
+    return {
+        "name": name,
+        "age": person["age"],
+        "birthday": person["birthday"],
+        "zodiac": zodiac,
+        "hobby": person["hobby"],
+        "quote": person["quote"],
+        "favorite_color": person["favorite_color"],
+    }
+
+
 @mcp.tool()
 def get_info(name: str):
     """
@@ -140,6 +154,30 @@ def get_people_family(name: str):
     key = find_person_key(name)
     if key:
         return PEOPLE[key]["family"]
+    return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def get_family_info(name: str):
+    """
+    Get detailed family info for a person
+    """
+    key = find_person_key(name)
+    if key:
+        family = PEOPLE[key]["family"]
+        members = []
+        for relation, member_name in family.items():
+            member = {"relation": relation, "name": member_name}
+            member_key = find_person_key(member_name)
+            if member_key:
+                member["profile"] = build_basic_profile(member_key)
+            members.append(member)
+        return {
+            "person": key,
+            "total_members": len(family),
+            "family": family,
+            "members": members,
+        }
     return "Không có dữ liệu được lưu trữ"
 
 
