@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP
 import random
+import re
 from typing import List, Optional
 
 # Khởi tạo server
@@ -148,34 +149,105 @@ def normalize_relation(
     return r
 
 
+_BIRTHDAY_RE = re.compile(r"^\s*(\d{1,2})\s*[/\-.]\s*(\d{1,2})\s*$")
+
+
+def parse_birthday_day_month(birthday: str) -> Optional[tuple[int, int]]:
+    """Parse birthday string like 'dd/mm' into (day, month).
+
+    Accepts separators: '/', '-', '.' and tolerates surrounding spaces.
+    Returns None if invalid/unsupported.
+    """
+
+    if not birthday:
+        return None
+
+    m = _BIRTHDAY_RE.match(birthday)
+    if not m:
+        return None
+
+    day = int(m.group(1))
+    month = int(m.group(2))
+
+    if not (1 <= month <= 12):
+        return None
+    if not (1 <= day <= 31):
+        return None
+
+    # Allow Feb 29 (no year info); reject obviously invalid dates like 31/04.
+    max_day_by_month = {
+        1: 31,
+        2: 29,
+        3: 31,
+        4: 30,
+        5: 31,
+        6: 30,
+        7: 31,
+        8: 31,
+        9: 30,
+        10: 31,
+        11: 30,
+        12: 31,
+    }
+
+    if day > max_day_by_month[month]:
+        return None
+
+    return day, month
+
+
 def zodiac_from_birthday(birthday: str) -> str:
-    try:
-        day_str, month_str = birthday.split("/")
-        day = int(day_str)
-        month = int(month_str)
-    except ValueError:
+    parsed = parse_birthday_day_month(birthday)
+    if not parsed:
         return "Không rõ"
 
+    day, month = parsed
+    key = month * 100 + day
+
     for start, end, zodiac in ZODIAC_RANGES:
-        if start[0] <= month <= end[0]:
-            if start[0] == end[0]:
-                if start[1] <= day <= end[1]:
-                    return zodiac
-            elif month == start[0] and day >= start[1]:
+        start_key = start[0] * 100 + start[1]
+        end_key = end[0] * 100 + end[1]
+
+        if start_key <= end_key:
+            if start_key <= key <= end_key:
                 return zodiac
-            elif month == end[0] and day <= end[1]:
+        else:
+            # Range wraps over the new year (e.g. 12/22 -> 1/19)
+            if key >= start_key or key <= end_key:
                 return zodiac
+
     return "Không rõ"
+
+
+def zodiac_number_from_birthday(birthday: str) -> Optional[int]:
+    """Return zodiac number 1-12 based on ZODIAC_RANGES order."""
+
+    zodiac = zodiac_from_birthday(birthday)
+    if zodiac == "Không rõ":
+        return None
+
+    for i, (_, _, name) in enumerate(ZODIAC_RANGES, start=1):
+        if name == zodiac:
+            return i
+
+    return None
+
+
+def zodiac_info_from_birthday(birthday: str):
+    zodiac = zodiac_from_birthday(birthday)
+    zodiac_number = zodiac_number_from_birthday(birthday)
+    return {"zodiac": zodiac, "zodiac_number": zodiac_number}
 
 
 def build_profile(name: str):
     person = PEOPLE[name]
-    zodiac = zodiac_from_birthday(person["birthday"])
+    zodiac_info = zodiac_info_from_birthday(person["birthday"])
     return {
         "name": name,
         "age": person["age"],
         "birthday": person["birthday"],
-        "zodiac": zodiac,
+        "zodiac": zodiac_info["zodiac"],
+        "zodiac_number": zodiac_info["zodiac_number"],
         "work_experience_years": person.get("work_experience_years", 0),
         "family": person["family"],
         "hobby": person["hobby"],
@@ -192,12 +264,22 @@ def get_info(name: str):
     key = find_person_key(name)
     if key:
         person = PEOPLE[key]
+        zodiac_info = zodiac_info_from_birthday(person["birthday"])
         return {
             "age": person["age"],
             "birthday": person["birthday"],
-            "zodiac": zodiac_from_birthday(person["birthday"]),
+            "zodiac": zodiac_info["zodiac"],
+            "zodiac_number": zodiac_info["zodiac_number"],
         }
     return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def get_zodiac_number(birthday: str):
+    """Get zodiac name and zodiac number (1-12) from a birthday string (dd/mm)."""
+
+    info = zodiac_info_from_birthday(birthday)
+    return {"birthday": birthday, **info}
 
 
 @mcp.tool()
