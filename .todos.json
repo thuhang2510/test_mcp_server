@@ -1,17 +1,27 @@
 [
   {
-    "content": "Review current MCP server tools and family data structure",
+    "content": "Rà soát các tool hiện có liên quan gia đình trong mcp_server.py và xác định điểm cần bổ sung",
     "status": "completed",
-    "activeForm": "Reviewing current MCP server tools and family data structure"
+    "activeForm": "Đang rà soát các tool gia đình hiện có"
   },
   {
-    "content": "Design and add new tool to return family information",
+    "content": "Bổ sung tool mới: get_family_overview(name) trả về tổng quan (members list + count + raw family)",
     "status": "completed",
-    "activeForm": "Designing and adding new tool to return family information"
+    "activeForm": "Đang bổ sung tool get_family_overview"
   },
   {
-    "content": "Validate changes for consistency and report updates",
+    "content": "Bổ sung tool mới: get_family_member(name, relation) để lấy 1 quan hệ cụ thể (cha/mẹ/anh/chị/em...)",
     "status": "completed",
-    "activeForm": "Validating changes for consistency and reporting updates"
+    "activeForm": "Đang bổ sung tool get_family_member"
+  },
+  {
+    "content": "Cập nhật mô tả/docstring để Claude chọn tool đúng hơn; giữ tương thích ngược",
+    "status": "completed",
+    "activeForm": "Đang cập nhật mô tả tool"
+  },
+  {
+    "content": "Chạy kiểm tra cú pháp Python (py_compile)",
+    "status": "completed",
+    "activeForm": "Đang chạy kiểm tra cú pháp"
   }
 ]

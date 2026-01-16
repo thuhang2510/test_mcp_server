@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP
 import random
+from typing import List, Optional
 
 # Khởi tạo server
 mcp = FastMCP("info")
@@ -81,6 +82,70 @@ def find_person_key(name: str):
     return None
 
 
+RELATION_ALIASES = {
+    # Parents
+    "father": "father",
+    "dad": "father",
+    "cha": "father",
+    "bố": "father",
+    "ba": "father",
+    "bố ruột": "father",
+    "cha ruột": "father",
+    "bố đẻ": "father",
+    "cha đẻ": "father",
+    "bố của": "father",
+    "cha của": "father",
+    # Mother
+    "mother": "mother",
+    "mom": "mother",
+    "mẹ": "mother",
+    "má": "mother",
+    "mẹ ruột": "mother",
+    "mẹ đẻ": "mother",
+    "mẹ của": "mother",
+    # Siblings
+    "brother": "brother",
+    "anh": "brother",
+    "anh trai": "brother",
+    "em trai": "brother",
+    "chị": "sister",
+    "chị gái": "sister",
+    "em gái": "sister",
+    "sister": "sister",
+}
+
+
+def normalize_relation(
+    relation: str, *, available_relations: Optional[List[str]] = None
+) -> str:
+    """Normalize a human relation string to our canonical keys.
+
+    Canonical keys used in PEOPLE[*]["family"] currently include: father, mother,
+    brother, sister.
+
+    If the user provides a generic sibling term like "em" and only one sibling
+    relation exists in the available_relations, we will infer that relation.
+    """
+
+    if not relation:
+        return ""
+
+    r = relation.strip().lower()
+
+    # quick alias mapping
+    if r in RELATION_ALIASES:
+        return RELATION_ALIASES[r]
+
+    # common generic sibling terms
+    if r in {"em", "anh chị em", "anh chi em", "sibling", "siblings"} and available_relations:
+        sibling_keys = [k for k in available_relations if k in {"brother", "sister"}]
+        if len(sibling_keys) == 1:
+            return sibling_keys[0]
+
+    # fall back to raw input (may already be canonical)
+    return r
+
+
 def zodiac_from_birthday(birthday: str) -> str:
     try:
         day_str, month_str = birthday.split("/")
@@ -134,8 +199,9 @@ def get_info(name: str):
 
 @mcp.tool()
 def get_people_family(name: str):
-    """
-    Get name of all people in family follow name
+    """Get raw family mapping for a person.
+
+    Returns a dict of relation -> name (e.g., father/mother/brother/sister).
     """
     key = find_person_key(name)
     if key:
@@ -145,8 +211,12 @@ def get_people_family(name: str):
 
 @mcp.tool()
 def get_family_info(name: str):
-    """
-    Get family information of a person (relation + name + count)
+    """Get family information of a person (members list + count).
+
+    Returns:
+    - person: canonical person key
+    - members: list[{relation, name}]
+    - member_count: number of family members stored
     """
     key = find_person_key(name)
     if key:
@@ -160,6 +230,86 @@ def get_family_info(name: str):
             "member_count": len(family),
         }
     return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def get_family_overview(name: str):
+    """Get a convenient family overview for a person.
+
+    Useful for questions like:
+    - "Gia đình của Hang gồm những ai?"
+    - "Các mối quan hệ trong gia đình Minh là gì?"
+
+    Returns:
+    - person: canonical person key
+    - family: raw mapping (relation -> name)
+    - relations: list of relation keys
+    - members: list[{relation, name}] (easy to render)
+    - member_count: number of family members stored
+    """
+
+    key = find_person_key(name)
+    if key:
+        family = PEOPLE[key]["family"]
+        return {
+            "person": key,
+            "family": family,
+            "relations": list(family.keys()),
+            "members": [
+                {"relation": relation, "name": member}
+                for relation, member in family.items()
+            ],
+            "member_count": len(family),
+        }
+    return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def get_family_member(name: str, relation: str):
+    """Get a specific family member by relation.
+
+    Example queries:
+    - "Bố của Hang là ai?" (relation="bố")
+    - "Mẹ Minh là ai?" (relation="mẹ")
+    - "Anh/chị/em của Minh là ai?" (relation="em")
+
+    Notes:
+    - This tool normalizes Vietnamese/English relation aliases into canonical keys:
+      father, mother, brother, sister.
+    """
+
+    key = find_person_key(name)
+    if not key:
+        return "Không có dữ liệu được lưu trữ"
+
+    family = PEOPLE[key]["family"]
+    available_relations = list(family.keys())
+    resolved_relation = normalize_relation(relation, available_relations=available_relations)
+
+    if resolved_relation in family:
+        return {
+            "person": key,
+            "relation_requested": relation,
+            "relation": resolved_relation,
+            "name": family[resolved_relation],
+        }
+
+    # fallback: if the provided text contains a canonical key
+    for rel in available_relations:
+        if rel in relation.strip().lower():
+            return {
+                "person": key,
+                "relation_requested": relation,
+                "relation": rel,
+                "name": family[rel],
+            }
+
+    return {
+        "person": key,
+        "relation_requested": relation,
+        "message": "Không tìm thấy quan hệ trong dữ liệu gia đình.",
+        "available_relations": available_relations,
+    }
 
 
 @mcp.tool()
