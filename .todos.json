@@ -1,27 +1,17 @@
 [
   {
-    "content": "Khảo sát nhanh cấu trúc repo và file liên quan để sửa đúng chỗ",
+    "content": "Liệt kê các file Python trong repo",
     "status": "completed",
-    "activeForm": "Đang khảo sát cấu trúc repo và file liên quan"
+    "activeForm": "Đang liệt kê các file Python trong repo"
   },
   {
-    "content": "Cập nhật dữ liệu PEOPLE để có work_experience_years cho từng người",
+    "content": "Quét các định nghĩa function (def/async def) và gom theo file",
     "status": "completed",
-    "activeForm": "Đang cập nhật dữ liệu PEOPLE với work_experience_years"
+    "activeForm": "Đang quét các định nghĩa function và gom theo file"
   },
   {
-    "content": "Cập nhật build_profile/get_profile/get_random_person để trả về work_experience_years",
+    "content": "Tổng hợp và trả danh sách function theo từng file",
     "status": "completed",
-    "activeForm": "Đang cập nhật profile tools để include work_experience_years"
-  },
-  {
-    "content": "Thêm MCP tool mới để lấy số năm kinh nghiệm làm việc theo tên",
-    "status": "completed",
-    "activeForm": "Đang thêm tool lấy số năm kinh nghiệm làm việc"
-  },
-  {
-    "content": "Chạy kiểm tra nhanh (py_compile) để đảm bảo không lỗi cú pháp",
-    "status": "completed",
-    "activeForm": "Đang chạy kiểm tra nhanh bằng py_compile"
+    "activeForm": "Đang tổng hợp và trả danh sách function theo từng file"
   }
 ]
