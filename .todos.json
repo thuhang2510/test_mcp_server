@@ -1,27 +1,27 @@
 [
   {
-    "content": "Rà soát các tool hiện có liên quan gia đình trong mcp_server.py và xác định điểm cần bổ sung",
+    "content": "Khảo sát nhanh cấu trúc repo và file liên quan để sửa đúng chỗ",
     "status": "completed",
-    "activeForm": "Đang rà soát các tool gia đình hiện có"
+    "activeForm": "Đang khảo sát cấu trúc repo và file liên quan"
   },
   {
-    "content": "Bổ sung tool mới: get_family_overview(name) trả về tổng quan (members list + count + raw family)",
+    "content": "Cập nhật dữ liệu PEOPLE để có work_experience_years cho từng người",
     "status": "completed",
-    "activeForm": "Đang bổ sung tool get_family_overview"
+    "activeForm": "Đang cập nhật dữ liệu PEOPLE với work_experience_years"
   },
   {
-    "content": "Bổ sung tool mới: get_family_member(name, relation) để lấy 1 quan hệ cụ thể (cha/mẹ/anh/chị/em...)",
+    "content": "Cập nhật build_profile/get_profile/get_random_person để trả về work_experience_years",
     "status": "completed",
-    "activeForm": "Đang bổ sung tool get_family_member"
+    "activeForm": "Đang cập nhật profile tools để include work_experience_years"
   },
   {
-    "content": "Cập nhật mô tả/docstring để Claude chọn tool đúng hơn; giữ tương thích ngược",
+    "content": "Thêm MCP tool mới để lấy số năm kinh nghiệm làm việc theo tên",
     "status": "completed",
-    "activeForm": "Đang cập nhật mô tả tool"
+    "activeForm": "Đang thêm tool lấy số năm kinh nghiệm làm việc"
   },
   {
-    "content": "Chạy kiểm tra cú pháp Python (py_compile)",
+    "content": "Chạy kiểm tra nhanh (py_compile) để đảm bảo không lỗi cú pháp",
     "status": "completed",
-    "activeForm": "Đang chạy kiểm tra cú pháp"
+    "activeForm": "Đang chạy kiểm tra nhanh bằng py_compile"
   }
 ]

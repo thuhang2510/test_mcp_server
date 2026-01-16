@@ -9,6 +9,7 @@ PEOPLE = {
     "Hang": {
         "age": 18,
         "birthday": "25/10",
+        "work_experience_years": 0,
         "family": {
             "father": "Dam VT",
             "mother": "La TT",
@@ -21,6 +22,7 @@ PEOPLE = {
     "Minh": {
         "age": 22,
         "birthday": "09/04",
+        "work_experience_years": 2,
         "family": {
             "father": "Tran TL",
             "mother": "Nguyen MT",
@@ -174,6 +176,7 @@ def build_profile(name: str):
         "age": person["age"],
         "birthday": person["birthday"],
         "zodiac": zodiac,
+        "work_experience_years": person.get("work_experience_years", 0),
         "family": person["family"],
         "hobby": person["hobby"],
         "quote": person["quote"],
@@ -193,6 +196,19 @@ def get_info(name: str):
             "age": person["age"],
             "birthday": person["birthday"],
             "zodiac": zodiac_from_birthday(person["birthday"]),
+        }
+    return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def get_work_experience_years(name: str):
+    """Get number of working experience years for a person."""
+    key = find_person_key(name)
+    if key:
+        person = PEOPLE[key]
+        return {
+            "person": key,
+            "work_experience_years": person.get("work_experience_years", 0),
         }
     return "Không có dữ liệu được lưu trữ"
 
