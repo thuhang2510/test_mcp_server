@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Review current MCP server tools and data handling",
+    "status": "completed",
+    "activeForm": "Reviewing current MCP server tools and data handling"
+  },
+  {
+    "content": "Design and add richer person profiles with extra tools (profile, random, compatibility)",
+    "status": "completed",
+    "activeForm": "Designing and adding richer person profiles with extra tools"
+  },
+  {
+    "content": "Update server implementations to use shared data + helpers",
+    "status": "completed",
+    "activeForm": "Updating server implementations to use shared data + helpers"
+  },
+  {
+    "content": "Sanity-check client compatibility and summarize changes",
+    "status": "completed",
+    "activeForm": "Sanity-checking client compatibility and summarizing changes"
+  }
+]
