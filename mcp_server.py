@@ -144,6 +144,25 @@ def get_people_family(name: str):
 
 
 @mcp.tool()
+def get_family_info(name: str):
+    """
+    Get family information of a person (relation + name + count)
+    """
+    key = find_person_key(name)
+    if key:
+        family = PEOPLE[key]["family"]
+        return {
+            "person": key,
+            "members": [
+                {"relation": relation, "name": member}
+                for relation, member in family.items()
+            ],
+            "member_count": len(family),
+        }
+    return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
 def get_profile(name: str):
     """
     Get full profile: info + family + hobby + quote + favorite color
