@@ -1,22 +1,17 @@
 [
   {
-    "content": "Review current MCP server tools and data handling",
+    "content": "Review current MCP server tools and family data structure",
     "status": "completed",
-    "activeForm": "Reviewing current MCP server tools and data handling"
+    "activeForm": "Reviewing current MCP server tools and family data structure"
   },
   {
-    "content": "Design and add richer person profiles with extra tools (profile, random, compatibility)",
+    "content": "Design and add new tool to return family information",
     "status": "completed",
-    "activeForm": "Designing and adding richer person profiles with extra tools"
+    "activeForm": "Designing and adding new tool to return family information"
   },
   {
-    "content": "Update server implementations to use shared data + helpers",
+    "content": "Validate changes for consistency and report updates",
     "status": "completed",
-    "activeForm": "Updating server implementations to use shared data + helpers"
-  },
-  {
-    "content": "Sanity-check client compatibility and summarize changes",
-    "status": "completed",
-    "activeForm": "Sanity-checking client compatibility and summarizing changes"
+    "activeForm": "Validating changes for consistency and reporting updates"
   }
 ]
