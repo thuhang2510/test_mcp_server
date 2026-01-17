@@ -1,17 +1,17 @@
 [
   {
-    "content": "Liệt kê các file Python trong repo",
+    "content": "Thêm tool `list_people` vào mcp_server.py (kèm option include_profiles)",
     "status": "completed",
-    "activeForm": "Đang liệt kê các file Python trong repo"
+    "activeForm": "Đang thêm tool `list_people` vào mcp_server.py"
   },
   {
-    "content": "Quét các định nghĩa function (def/async def) và gom theo file",
+    "content": "Bổ sung unit test cho `list_people` trong test_mcp_server.py",
     "status": "completed",
-    "activeForm": "Đang quét các định nghĩa function và gom theo file"
+    "activeForm": "Đang bổ sung unit test cho `list_people`"
   },
   {
-    "content": "Tổng hợp và trả danh sách function theo từng file",
+    "content": "Chạy test suite và sửa lỗi (nếu có)",
     "status": "completed",
-    "activeForm": "Đang tổng hợp và trả danh sách function theo từng file"
+    "activeForm": "Đang chạy test suite và sửa lỗi"
   }
 ]

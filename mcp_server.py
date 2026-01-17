@@ -438,6 +438,27 @@ def get_random_person():
 
 
 @mcp.tool()
+def list_people(include_profiles: bool = False):
+    """List all people currently stored.
+
+    Args:
+        include_profiles: If True, return full profiles for each person.
+
+    Returns:
+        Dict with:
+        - count: number of people
+        - people: list of names or list of profiles
+    """
+
+    names = sorted(PEOPLE.keys())
+
+    if include_profiles:
+        return {"count": len(names), "people": [build_profile(name) for name in names]}
+
+    return {"count": len(names), "people": names}
+
+
+@mcp.tool()
 def get_compatibility(name_a: str, name_b: str):
     """
     Simple compatibility check between two people
