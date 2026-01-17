@@ -3,6 +3,7 @@ from datetime import datetime
 
 from mcp_server import (
     get_current_time,
+    list_people,
     parse_birthday_day_month,
     zodiac_from_birthday,
     zodiac_info_from_birthday,
@@ -57,6 +58,27 @@ class TestZodiacNumber(unittest.TestCase):
 
         # ISO string phải parse được
         datetime.fromisoformat(out["iso"])
+
+
+class TestListPeople(unittest.TestCase):
+    def test_list_people_names(self):
+        out = list_people()
+
+        self.assertIn("count", out)
+        self.assertIn("people", out)
+        self.assertEqual(out["count"], len(out["people"]))
+        self.assertEqual(out["people"], sorted(out["people"]))
+
+        self.assertIn("Hang", out["people"])
+        self.assertIn("Minh", out["people"])
+
+    def test_list_people_profiles(self):
+        out = list_people(include_profiles=True)
+
+        self.assertEqual(out["count"], len(out["people"]))
+        names = {p["name"] for p in out["people"]}
+        self.assertEqual(names, {"Hang", "Minh"})
+        self.assertTrue(all("zodiac" in p for p in out["people"]))
 
 
 if __name__ == "__main__":
