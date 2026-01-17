@@ -4,6 +4,7 @@ from datetime import datetime
 from mcp_server import (
     get_current_time,
     list_people,
+    search_people,
     parse_birthday_day_month,
     zodiac_from_birthday,
     zodiac_info_from_birthday,
@@ -79,6 +80,32 @@ class TestListPeople(unittest.TestCase):
         names = {p["name"] for p in out["people"]}
         self.assertEqual(names, {"Hang", "Minh"})
         self.assertTrue(all("zodiac" in p for p in out["people"]))
+
+
+class TestSearchPeople(unittest.TestCase):
+    def test_search_by_name_case_insensitive(self):
+        out = search_people("HANG")
+        self.assertIn("people", out)
+        self.assertIn("Hang", out["people"])
+
+    def test_search_by_hobby_no_accents(self):
+        out = search_people("nhiep anh", fields=["hobby"])
+        self.assertEqual(out["people"], ["Hang"])
+
+    def test_search_by_favorite_color(self):
+        out = search_people("xanh", fields=["favorite_color"])
+        self.assertEqual(out["people"], ["Minh"])
+
+    def test_search_include_profiles(self):
+        out = search_people("minh", include_profiles=True)
+        self.assertEqual(out["count"], 1)
+        self.assertEqual(out["people"][0]["name"], "Minh")
+        self.assertIn("hobby", out["people"][0])
+
+    def test_search_limit_on_empty_query(self):
+        out = search_people("", limit=1)
+        self.assertEqual(out["count"], 1)
+        self.assertEqual(len(out["people"]), 1)
 
 
 if __name__ == "__main__":

@@ -1,16 +1,21 @@
 [
   {
-    "content": "Thêm tool `list_people` vào mcp_server.py (kèm option include_profiles)",
+    "content": "Phân tích mcp_server.py và thiết kế API cho tool search_people",
     "status": "completed",
-    "activeForm": "Đang thêm tool `list_people` vào mcp_server.py"
+    "activeForm": "Đang thiết kế API cho tool search_people"
   },
   {
-    "content": "Bổ sung unit test cho `list_people` trong test_mcp_server.py",
+    "content": "Implement tool search_people trong mcp_server.py (matching + filters + limit + include_profiles)",
     "status": "completed",
-    "activeForm": "Đang bổ sung unit test cho `list_people`"
+    "activeForm": "Đang implement tool search_people"
   },
   {
-    "content": "Chạy test suite và sửa lỗi (nếu có)",
+    "content": "Bổ sung unit test cho search_people trong test_mcp_server.py",
+    "status": "completed",
+    "activeForm": "Đang viết unit test cho search_people"
+  },
+  {
+    "content": "Chạy test suite và sửa lỗi nếu có",
     "status": "completed",
     "activeForm": "Đang chạy test suite và sửa lỗi"
   }

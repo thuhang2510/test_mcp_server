@@ -1,6 +1,7 @@
 from mcp.server.fastmcp import FastMCP
 import random
 import re
+import unicodedata
 from datetime import datetime
 from typing import List, Optional
 
@@ -82,6 +83,19 @@ COMPLEMENT_ELEMENTS = {
 
 def normalize_name(name: str) -> str:
     return name.strip().lower()
+
+
+def normalize_text(text: str) -> str:
+    """Normalize text for forgiving comparisons (case-insensitive, no accents)."""
+    if text is None:
+        return ""
+    s = str(text).strip().lower()
+    # Remove Vietnamese accents/diacritics for more forgiving search
+    s = unicodedata.normalize("NFKD", s)
+    s = "".join(ch for ch in s if not unicodedata.combining(ch))
+    # Normalize whitespace
+    s = re.sub(r"\s+", " ", s)
+    return s
 
 
 def find_person_key(name: str):
@@ -456,6 +470,129 @@ def list_people(include_profiles: bool = False):
         return {"count": len(names), "people": [build_profile(name) for name in names]}
 
     return {"count": len(names), "people": names}
+
+
+SEARCHABLE_FIELDS = {
+    "name",
+    "age",
+    "birthday",
+    "zodiac",
+    "zodiac_number",
+    "work_experience_years",
+    "hobby",
+    "quote",
+    "favorite_color",
+    "family",
+}
+
+
+def _normalize_fields(fields: Optional[List[str]]) -> Optional[List[str]]:
+    if not fields:
+        return None
+    out: List[str] = []
+    for f in fields:
+        if not f:
+            continue
+        k = str(f).strip().lower()
+        if k in SEARCHABLE_FIELDS:
+            out.append(k)
+    return out or None
+
+
+@mcp.tool()
+def search_people(
+    query: str,
+    fields: Optional[List[str]] = None,
+    include_profiles: bool = False,
+    limit: int = 10,
+):
+    """Search people by a free-text query.
+
+    - Mặc định sẽ search trên tất cả field phổ biến (name, hobby, quote, ...).
+    - Search không phân biệt hoa/thường và có hỗ trợ bỏ dấu (để match dễ hơn).
+
+    Args:
+        query: Chuỗi cần tìm.
+        fields: Danh sách field muốn search (vd: ["name", "hobby"]). Nếu None -> search all.
+        include_profiles: True -> trả về full profile; False -> chỉ trả về danh sách tên.
+        limit: Giới hạn số kết quả trả về.
+
+    Returns:
+        Dict gồm query, count, people và matches (matched_fields theo từng người).
+    """
+
+    needle = normalize_text(query)
+    normalized_fields = _normalize_fields(fields)
+
+    # clamp limit to avoid returning too much data
+    try:
+        limit_i = int(limit)
+    except Exception:
+        limit_i = 10
+    if limit_i <= 0:
+        limit_i = 10
+    limit_i = min(limit_i, 50)
+
+    matches: List[dict] = []
+
+    for name in sorted(PEOPLE.keys()):
+        profile = build_profile(name)
+
+        # Build searchable text per field
+        family = profile.get("family") or {}
+        family_text = " ".join(f"{rel} {member}" for rel, member in family.items())
+
+        field_value_map = {
+            "name": profile.get("name", ""),
+            "age": profile.get("age", ""),
+            "birthday": profile.get("birthday", ""),
+            "zodiac": profile.get("zodiac", ""),
+            "zodiac_number": profile.get("zodiac_number", ""),
+            "work_experience_years": profile.get("work_experience_years", ""),
+            "hobby": profile.get("hobby", ""),
+            "quote": profile.get("quote", ""),
+            "favorite_color": profile.get("favorite_color", ""),
+            "family": family_text,
+        }
+
+        fields_to_search = normalized_fields or list(SEARCHABLE_FIELDS)
+
+        matched_fields: List[str] = []
+
+        # If empty query -> treat as match-all (like list_people) but still respects limit
+        if needle == "":
+            matched_fields = fields_to_search
+        else:
+            for f in fields_to_search:
+                hay = normalize_text(field_value_map.get(f, ""))
+                if needle and needle in hay:
+                    matched_fields.append(f)
+
+        if matched_fields:
+            matches.append({
+                "name": name,
+                "matched_fields": sorted(set(matched_fields)),
+                "profile": profile,
+            })
+
+        if len(matches) >= limit_i:
+            break
+
+    if include_profiles:
+        people_out = [m["profile"] for m in matches]
+    else:
+        people_out = [m["name"] for m in matches]
+
+    return {
+        "query": query,
+        "fields": normalized_fields or sorted(SEARCHABLE_FIELDS),
+        "count": len(matches),
+        "limit": limit_i,
+        "people": people_out,
+        "matches": [
+            {"name": m["name"], "matched_fields": m["matched_fields"]} for m in matches
+        ],
+    }
 
 
 @mcp.tool()
