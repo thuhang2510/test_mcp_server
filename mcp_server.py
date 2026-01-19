@@ -19,6 +19,10 @@ PEOPLE = {
         "age": 18,
         "birthday": "25/10",
         "work_experience_years": 0,
+        "email": "hang.dam@email.com",
+        "phone": "0123456789",
+        "address": "123 Đường Lê Lợi, Quận 1, TP.HCM",
+        "occupation": "Sinh viên",
         "family": {
             "father": "Dam VT",
             "mother": "La TT",
@@ -32,6 +36,10 @@ PEOPLE = {
         "age": 22,
         "birthday": "09/04",
         "work_experience_years": 2,
+        "email": "minh.tran@company.vn",
+        "phone": "0987654321",
+        "address": "456 Đường Nguyễn Huệ, Quận 3, TP.HCM",
+        "occupation": "Kỹ sư phần mềm",
         "family": {
             "father": "Tran TL",
             "mother": "Nguyen MT",
@@ -270,6 +278,10 @@ def build_profile(name: str):
         "zodiac": zodiac_info["zodiac"],
         "zodiac_number": zodiac_info["zodiac_number"],
         "work_experience_years": person.get("work_experience_years", 0),
+        "email": person.get("email", ""),
+        "phone": person.get("phone", ""),
+        "address": person.get("address", ""),
+        "occupation": person.get("occupation", ""),
         "family": person["family"],
         "hobby": person["hobby"],
         "quote": person["quote"],
@@ -452,6 +464,73 @@ def get_random_person():
 
 
 @mcp.tool()
+def get_contact_info(name: str):
+    """Get contact information (email, phone, address) for a person."""
+    key = find_person_key(name)
+    if key:
+        person = PEOPLE[key]
+        return {
+            "person": key,
+            "email": person.get("email", ""),
+            "phone": person.get("phone", ""),
+            "address": person.get("address", ""),
+        }
+    return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def get_email(name: str):
+    """Get email address of a person."""
+    key = find_person_key(name)
+    if key:
+        person = PEOPLE[key]
+        return {
+            "person": key,
+            "email": person.get("email", ""),
+        }
+    return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def get_phone(name: str):
+    """Get phone number of a person."""
+    key = find_person_key(name)
+    if key:
+        person = PEOPLE[key]
+        return {
+            "person": key,
+            "phone": person.get("phone", ""),
+        }
+    return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def get_address(name: str):
+    """Get home address of a person."""
+    key = find_person_key(name)
+    if key:
+        person = PEOPLE[key]
+        return {
+            "person": key,
+            "address": person.get("address", ""),
+        }
+    return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def get_occupation(name: str):
+    """Get occupation/job of a person."""
+    key = find_person_key(name)
+    if key:
+        person = PEOPLE[key]
+        return {
+            "person": key,
+            "occupation": person.get("occupation", ""),
+        }
+    return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
 def list_people(include_profiles: bool = False):
     """List all people currently stored.
 
@@ -479,6 +558,10 @@ SEARCHABLE_FIELDS = {
     "zodiac",
     "zodiac_number",
     "work_experience_years",
+    "email",
+    "phone",
+    "address",
+    "occupation",
     "hobby",
     "quote",
     "favorite_color",
@@ -549,6 +632,10 @@ def search_people(
             "zodiac": profile.get("zodiac", ""),
             "zodiac_number": profile.get("zodiac_number", ""),
             "work_experience_years": profile.get("work_experience_years", ""),
+            "email": profile.get("email", ""),
+            "phone": profile.get("phone", ""),
+            "address": profile.get("address", ""),
+            "occupation": profile.get("occupation", ""),
             "hobby": profile.get("hobby", ""),
             "quote": profile.get("quote", ""),
             "favorite_color": profile.get("favorite_color", ""),
