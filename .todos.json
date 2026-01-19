@@ -1,22 +1,22 @@
 [
   {
-    "content": "Phân tích mcp_server.py và thiết kế API cho tool search_people",
+    "content": "Cập nhật cấu trúc dữ liệu PEOPLE để thêm email, phone, address, occupation",
     "status": "completed",
-    "activeForm": "Đang thiết kế API cho tool search_people"
+    "activeForm": "Đang cập nhật cấu trúc dữ liệu"
   },
   {
-    "content": "Implement tool search_people trong mcp_server.py (matching + filters + limit + include_profiles)",
+    "content": "Cập nhật hàm build_profile để bao gồm thông tin mới",
     "status": "completed",
-    "activeForm": "Đang implement tool search_people"
+    "activeForm": "Đang cập nhật hàm build_profile"
   },
   {
-    "content": "Bổ sung unit test cho search_people trong test_mcp_server.py",
+    "content": "Thêm các tool mới để truy xuất thông tin email, phone, address, occupation",
     "status": "completed",
-    "activeForm": "Đang viết unit test cho search_people"
+    "activeForm": "Đang tạo các tool mới"
   },
   {
-    "content": "Chạy test suite và sửa lỗi nếu có",
+    "content": "Cập nhật SEARCHABLE_FIELDS và search_people để hỗ trợ tìm kiếm thông tin mới",
     "status": "completed",
-    "activeForm": "Đang chạy test suite và sửa lỗi"
+    "activeForm": "Đang cập nhật tính năng tìm kiếm"
   }
 ]
