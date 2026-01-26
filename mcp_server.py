@@ -725,6 +725,43 @@ def get_compatibility(name_a: str, name_b: str):
 
 
 @mcp.tool()
+@mcp.tool()
+def delete_person(name: str):
+    """Xóa người khỏi hệ thống.
+    
+    Args:
+        name: Tên người cần xóa
+        
+    Returns:
+        Dict với thông tin xác nhận xóa hoặc thông báo lỗi
+    """
+    key = find_person_key(name)
+    if not key:
+        return {
+            "success": False,
+            "message": "Không tìm thấy người cần xóa",
+            "name_requested": name
+        }
+    
+    # Lưu thông tin người bị xóa để xác nhận
+    deleted_person = PEOPLE[key].copy()
+    
+    # Xóa người khỏi dictionary
+    del PEOPLE[key]
+    
+    return {
+        "success": True,
+        "message": f"Đã xóa {key} khỏi hệ thống",
+        "deleted_person": {
+            "name": key,
+            "age": deleted_person.get("age"),
+            "occupation": deleted_person.get("occupation", ""),
+        },
+        "remaining_count": len(PEOPLE)
+    }
+
+
+@mcp.tool()
 def get_current_time(tz: str = "Asia/Ho_Chi_Minh", fmt: str = "%Y-%m-%d %H:%M:%S"):
     """Lấy giờ hiện tại.
 
