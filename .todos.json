@@ -1,17 +1,22 @@
 [
   {
-    "content": "Rà soát mcp_server.py để xác định vị trí thêm tool mới",
+    "content": "Cập nhật cấu trúc dữ liệu PEOPLE để thêm email, phone, address, occupation",
     "status": "completed",
-    "activeForm": "Đang rà soát mcp_server.py để xác định vị trí thêm tool mới"
+    "activeForm": "Đang cập nhật cấu trúc dữ liệu"
   },
   {
-    "content": "Thêm tool delete_person(name) để xóa người khỏi PEOPLE",
+    "content": "Cập nhật hàm build_profile để bao gồm thông tin mới",
     "status": "completed",
-    "activeForm": "Đang thêm tool delete_person(name) để xóa người khỏi PEOPLE"
+    "activeForm": "Đang cập nhật hàm build_profile"
   },
   {
-    "content": "Tóm tắt thay đổi đã thực hiện",
+    "content": "Thêm các tool mới để truy xuất thông tin email, phone, address, occupation",
     "status": "completed",
-    "activeForm": "Đang tóm tắt thay đổi đã thực hiện"
+    "activeForm": "Đang tạo các tool mới"
+  },
+  {
+    "content": "Cập nhật SEARCHABLE_FIELDS và search_people để hỗ trợ tìm kiếm thông tin mới",
+    "status": "completed",
+    "activeForm": "Đang cập nhật tính năng tìm kiếm"
   }
 ]
