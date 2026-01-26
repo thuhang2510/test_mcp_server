@@ -1,6 +1,49 @@
 # Changelog - Thêm Thông Tin Cơ Bản
 
-## Phiên bản mới - Ngày 19/01/2025
+## Phiên bản mới nhất - Ngày 26/01/2025
+
+### ✨ Tính năng mới
+
+#### 🆕 Tool thêm người mới - add_person
+- **Mô tả**: Thêm người mới vào hệ thống với thông tin chi tiết
+- **Tham số bắt buộc**:
+  - `name`: Tên của người (chuỗi)
+  - `age`: Tuổi (số nguyên từ 0-150)
+  - `birthday`: Ngày sinh định dạng dd/mm (ví dụ: 25/10)
+  - `email`: Email hợp lệ
+  - `phone`: Số điện thoại (8-15 chữ số)
+
+- **Tham số tùy chọn**:
+  - `address`: Địa chỉ cư trú
+  - `occupation`: Nghề nghiệp
+  - `work_experience_years`: Số năm kinh nghiệm (mặc định 0)
+  - `father`, `mother`, `siblings`: Thông tin gia đình
+  - `hobby`: Sở thích
+  - `quote`: Câu nói yêu thích
+  - `favorite_color`: Màu sắc yêu thích
+
+- **Validation**:
+  - ✅ Kiểm tra tên không trùng lặp
+  - ✅ Validate định dạng email
+  - ✅ Validate số điện thoại
+  - ✅ Validate định dạng ngày sinh
+  - ✅ Validate độ tuổi hợp lý
+
+- **Ví dụ sử dụng**:
+  ```python
+  add_person(
+      name="Lan Nguyen",
+      age=25,
+      birthday="15/8",
+      email="lan.nguyen@example.com",
+      phone="0901234567",
+      occupation="Thiết kế đồ họa"
+  )
+  ```
+
+---
+
+## Phiên bản trước - Ngày 19/01/2025
 
 ### ✨ Tính năng mới
 
