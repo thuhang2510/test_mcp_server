@@ -551,23 +551,6 @@ def list_people(include_profiles: bool = False):
     return {"count": len(names), "people": names}
 
 
-@mcp.tool()
-def delete_person(name: str):
-    """Xóa người khỏi hệ thống theo tên."""
-    key = find_person_key(name)
-    if not key:
-        return "Không có dữ liệu được lưu trữ"
-
-    profile = build_profile(key)
-    PEOPLE.pop(key, None)
-
-    return {
-        "deleted": key,
-        "profile": profile,
-        "remaining_count": len(PEOPLE),
-    }
-
-
 SEARCHABLE_FIELDS = {
     "name",
     "age",
