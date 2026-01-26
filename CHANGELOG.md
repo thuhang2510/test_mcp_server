@@ -1,27 +1,6 @@
 # Changelog - Thêm Thông Tin Cơ Bản
 
-## Phiên bản mới nhất - Ngày 19/01/2025
-
-### ✨ Tính năng mới - Delete Person
-
-#### 🗑️ Tool delete_person(name)
-- **Chức năng**: Xóa một người khỏi hệ thống hoàn toàn
-- **Tham số**: `name` - Tên của người cần xóa (không phân biệt hoa thường và dấu)
-- **Trả về**:
-  - `success`: True/False - Trạng thái thành công
-  - `message`: Thông báo kết quả
-  - `deleted_person`: Thông tin người đã xóa (nếu thành công)
-  - `remaining_people`: Danh sách người còn lại
-  - `total_remaining`: Tổng số người còn lại
-
-#### ⚠️ Lưu ý quan trọng
-- Tool sử dụng `find_person_key()` để tìm người chính xác
-- Xóa vĩnh viễn khỏi dictionary PEOPLE
-- Trả về thông tin chi tiết cho cả trường hợp thành công và thất bại
-
----
-
-## Phiên bản trước - Ngày 19/01/2025
+## Phiên bản mới - Ngày 19/01/2025
 
 ### ✨ Tính năng mới
 

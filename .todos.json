@@ -1,22 +1,22 @@
 [
   {
-    "content": "Tìm vị trí thích hợp để thêm delete_person function trong mcp_server.py",
+    "content": "Cập nhật cấu trúc dữ liệu PEOPLE để thêm email, phone, address, occupation",
     "status": "completed",
-    "activeForm": "Finding appropriate location"
+    "activeForm": "Đang cập nhật cấu trúc dữ liệu"
   },
   {
-    "content": "Thêm delete_person tool function vào cuối file trước get_current_time",
+    "content": "Cập nhật hàm build_profile để bao gồm thông tin mới",
     "status": "completed",
-    "activeForm": "Adding delete_person function"
+    "activeForm": "Đang cập nhật hàm build_profile"
   },
   {
-    "content": "Test tính năng xóa người để đảm bảo hoạt động chính xác",
+    "content": "Thêm các tool mới để truy xuất thông tin email, phone, address, occupation",
     "status": "completed",
-    "activeForm": "Testing delete functionality"
+    "activeForm": "Đang tạo các tool mới"
   },
   {
-    "content": "Cập nhật CHANGELOG.md với tính năng mới",
+    "content": "Cập nhật SEARCHABLE_FIELDS và search_people để hỗ trợ tìm kiếm thông tin mới",
     "status": "completed",
-    "activeForm": "Updating changelog"
+    "activeForm": "Đang cập nhật tính năng tìm kiếm"
   }
 ]
