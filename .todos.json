@@ -1,17 +1,22 @@
 [
   {
-    "content": "Thêm helper functions để validate field và value",
+    "content": "Cập nhật cấu trúc dữ liệu PEOPLE để thêm email, phone, address, occupation",
     "status": "completed",
-    "activeForm": "Thêm helper functions"
+    "activeForm": "Đang cập nhật cấu trúc dữ liệu"
   },
   {
-    "content": "Implement update_person tool với validation",
+    "content": "Cập nhật hàm build_profile để bao gồm thông tin mới",
     "status": "completed",
-    "activeForm": "Implementing update_person tool"
+    "activeForm": "Đang cập nhật hàm build_profile"
   },
   {
-    "content": "Test tính năng mới với các trường hợp khác nhau",
+    "content": "Thêm các tool mới để truy xuất thông tin email, phone, address, occupation",
     "status": "completed",
-    "activeForm": "Testing update_person functionality"
+    "activeForm": "Đang tạo các tool mới"
+  },
+  {
+    "content": "Cập nhật SEARCHABLE_FIELDS và search_people để hỗ trợ tìm kiếm thông tin mới",
+    "status": "completed",
+    "activeForm": "Đang cập nhật tính năng tìm kiếm"
   }
 ]
