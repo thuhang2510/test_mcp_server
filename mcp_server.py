@@ -906,50 +906,6 @@ def get_compatibility(name_a: str, name_b: str):
 
 
 @mcp.tool()
-def get_current_age(name: str, tz: str = "Asia/Ho_Chi_Minh"):
-    """Trả về tuổi hiện tại của một người.
-
-    Nếu chưa tới sinh nhật trong năm hiện tại, tuổi sẽ giảm 1 so với tuổi lưu trữ.
-    """
-    key = find_person_key(name)
-    if not key:
-        return "Không có dữ liệu được lưu trữ"
-
-    person = PEOPLE[key]
-    try:
-        age_value = int(person.get("age", 0))
-    except Exception:
-        age_value = 0
-
-    birthday = person.get("birthday", "")
-    parsed = parse_birthday_day_month(birthday)
-
-    current_age = age_value
-
-    if parsed:
-        now: datetime
-
-        if ZoneInfo is not None:
-            try:
-                now = datetime.now(ZoneInfo(tz))
-            except Exception:
-                now = datetime.now().astimezone()
-                tz = str(now.tzinfo) if now.tzinfo else tz
-        else:  # pragma: no cover
-            now = datetime.now().astimezone()
-            tz = str(now.tzinfo) if now.tzinfo else tz
-
-        day, month = parsed
-        if (now.month, now.day) < (month, day):
-            current_age = max(age_value - 1, 0)
-
-    return {
-        "person": key,
-        "current_age": current_age,
-    }
-
-
-@mcp.tool()
 def get_current_time(tz: str = "Asia/Ho_Chi_Minh", fmt: str = "%Y-%m-%d %H:%M:%S"):
     """Lấy giờ hiện tại.
 
