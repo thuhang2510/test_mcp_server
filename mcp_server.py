@@ -225,6 +225,20 @@ def parse_birthday_day_month(birthday: str) -> Optional[tuple[int, int]]:
     return day, month
 
 
+def format_birthday_ddmm(birthday: str) -> str:
+    """Normalize birthday string to dd/mm format when possible."""
+    if birthday is None:
+        return ""
+
+    birthday_text = str(birthday).strip()
+    parsed = parse_birthday_day_month(birthday_text)
+    if not parsed:
+        return birthday_text
+
+    day, month = parsed
+    return f"{day:02d}/{month:02d}"
+
+
 def zodiac_from_birthday(birthday: str) -> str:
     parsed = parse_birthday_day_month(birthday)
     if not parsed:
@@ -303,6 +317,19 @@ def get_info(name: str):
             "birthday": person["birthday"],
             "zodiac": zodiac_info["zodiac"],
             "zodiac_number": zodiac_info["zodiac_number"],
+        }
+    return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def get_birthday(name: str):
+    """Trả về ngày sinh theo định dạng dd/mm."""
+    key = find_person_key(name)
+    if key:
+        person = PEOPLE[key]
+        return {
+            "person": key,
+            "birthday": format_birthday_ddmm(person.get("birthday", "")),
         }
     return "Không có dữ liệu được lưu trữ"
 

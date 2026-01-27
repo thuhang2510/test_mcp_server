@@ -1,17 +1,17 @@
 [
   {
-    "content": "Rà soát cấu trúc dữ liệu PEOPLE và các tool liên hệ hiện có trong mcp_server.py",
+    "content": "Rà soát dữ liệu ngày sinh và các tool hiện có trong mcp_server.py",
     "status": "completed",
-    "activeForm": "Rà soát cấu trúc dữ liệu PEOPLE và các tool liên hệ hiện có trong mcp_server.py"
+    "activeForm": "Rà soát dữ liệu ngày sinh và các tool hiện có trong mcp_server.py"
   },
   {
-    "content": "Thiết kế logic cập nhật trường email/phone/address cho người đã có",
+    "content": "Thiết kế hàm định dạng dd/mm và tool trả về ngày sinh theo tên",
     "status": "completed",
-    "activeForm": "Thiết kế logic cập nhật trường email/phone/address cho người đã có"
+    "activeForm": "Thiết kế hàm định dạng dd/mm và tool trả về ngày sinh theo tên"
   },
   {
-    "content": "Thêm tool update_person vào mcp_server.py và trả về kết quả cập nhật rõ ràng",
+    "content": "Chèn thay đổi tối thiểu vào mcp_server.py và đảm bảo trả về đúng định dạng",
     "status": "completed",
-    "activeForm": "Thêm tool update_person vào mcp_server.py và trả về kết quả cập nhật rõ ràng"
+    "activeForm": "Chèn thay đổi tối thiểu vào mcp_server.py và đảm bảo trả về đúng định dạng"
   }
 ]
