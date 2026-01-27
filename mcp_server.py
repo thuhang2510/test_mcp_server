@@ -561,6 +561,15 @@ def delete_person(name: str):
     profile = build_profile(key)
     PEOPLE.pop(key, None)
 
+    deleted_norm = normalize_text(key)
+    for person in PEOPLE.values():
+        family = person.get("family")
+        if not isinstance(family, dict):
+            continue
+        for relation, member in list(family.items()):
+            if normalize_text(member) == deleted_norm:
+                family.pop(relation, None)
+
     return {
         "deleted": key,
         "profile": profile,
