@@ -531,6 +531,82 @@ def get_occupation(name: str):
 
 
 @mcp.tool()
+def add_person(
+    name: str,
+    age: int,
+    birthday: str,
+    email: str = "",
+    phone: str = "",
+    address: str = "",
+    occupation: str = "",
+    work_experience_years: int = 0,
+    family: Optional[dict] = None,
+    hobby: str = "",
+    quote: str = "",
+    favorite_color: str = "",
+):
+    """Thêm người mới vào hệ thống."""
+    cleaned_name = str(name).strip()
+    if not cleaned_name:
+        return "Tên không hợp lệ"
+
+    normalized_name = normalize_name(cleaned_name)
+    for existing in PEOPLE:
+        if normalize_name(existing) == normalized_name:
+            return {
+                "message": "Người đã tồn tại trong hệ thống.",
+                "person": existing,
+            }
+
+    birthday_value = str(birthday).strip()
+    if not birthday_value:
+        return {
+            "message": "Ngày sinh không hợp lệ. Vui lòng dùng định dạng dd/mm.",
+            "birthday": birthday,
+        }
+
+    if parse_birthday_day_month(birthday_value) is None:
+        return {
+            "message": "Ngày sinh không hợp lệ. Vui lòng dùng định dạng dd/mm.",
+            "birthday": birthday_value,
+        }
+
+    try:
+        age_value = int(age)
+    except Exception:
+        return {"message": "Tuổi không hợp lệ.", "age": age}
+
+    try:
+        work_years_value = int(work_experience_years)
+    except Exception:
+        work_years_value = 0
+
+    family_value = family if isinstance(family, dict) else None
+    if family is not None and family_value is None:
+        return {"message": "Family phải là dict quan hệ -> tên.", "family": family}
+
+    PEOPLE[cleaned_name] = {
+        "age": age_value,
+        "birthday": birthday_value,
+        "work_experience_years": work_years_value,
+        "email": str(email).strip(),
+        "phone": str(phone).strip(),
+        "address": str(address).strip(),
+        "occupation": str(occupation).strip(),
+        "family": family_value or {},
+        "hobby": str(hobby).strip(),
+        "quote": str(quote).strip(),
+        "favorite_color": str(favorite_color).strip(),
+    }
+
+    return {
+        "added": cleaned_name,
+        "profile": build_profile(cleaned_name),
+        "count": len(PEOPLE),
+    }
+
+
+@mcp.tool()
 def list_people(include_profiles: bool = False):
     """List all people currently stored.
 

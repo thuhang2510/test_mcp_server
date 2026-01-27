@@ -1,17 +1,17 @@
 [
   {
-    "content": "Rà soát mcp_server.py để xác định vị trí thêm tool xóa người",
+    "content": "Xác định vị trí bổ sung tool add_person và quy tắc dữ liệu mặc định",
     "status": "completed",
-    "activeForm": "Rà soát mcp_server.py để xác định vị trí thêm tool xóa người"
+    "activeForm": "Xác định vị trí bổ sung tool add_person và quy tắc dữ liệu mặc định"
   },
   {
-    "content": "Thêm tool delete_person(name) để xóa người khỏi PEOPLE và trả kết quả phù hợp",
+    "content": "Cài đặt tool add_person cập nhật PEOPLE với kiểm tra trùng tên và giá trị mặc định an toàn",
     "status": "completed",
-    "activeForm": "Thêm tool delete_person(name) để xóa người khỏi PEOPLE và trả kết quả phù hợp"
+    "activeForm": "Cài đặt tool add_person cập nhật PEOPLE với kiểm tra trùng tên và giá trị mặc định an toàn"
   },
   {
-    "content": "Kiểm tra nhanh luồng trả về và hoàn tất cập nhật todo",
+    "content": "Rà soát đảm bảo build_profile và các tool khác không bị lỗi khi thêm người mới",
     "status": "completed",
-    "activeForm": "Kiểm tra nhanh luồng trả về và hoàn tất cập nhật todo"
+    "activeForm": "Rà soát đảm bảo build_profile và các tool khác không bị lỗi khi thêm người mới"
   }
 ]
