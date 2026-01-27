@@ -1,17 +1,17 @@
 [
   {
-    "content": "Xác định vị trí bổ sung tool add_person và quy tắc dữ liệu mặc định",
+    "content": "Rà soát cấu trúc dữ liệu PEOPLE và các tool liên hệ hiện có trong mcp_server.py",
     "status": "completed",
-    "activeForm": "Xác định vị trí bổ sung tool add_person và quy tắc dữ liệu mặc định"
+    "activeForm": "Rà soát cấu trúc dữ liệu PEOPLE và các tool liên hệ hiện có trong mcp_server.py"
   },
   {
-    "content": "Cài đặt tool add_person cập nhật PEOPLE với kiểm tra trùng tên và giá trị mặc định an toàn",
+    "content": "Thiết kế logic cập nhật trường email/phone/address cho người đã có",
     "status": "completed",
-    "activeForm": "Cài đặt tool add_person cập nhật PEOPLE với kiểm tra trùng tên và giá trị mặc định an toàn"
+    "activeForm": "Thiết kế logic cập nhật trường email/phone/address cho người đã có"
   },
   {
-    "content": "Rà soát đảm bảo build_profile và các tool khác không bị lỗi khi thêm người mới",
+    "content": "Thêm tool update_person vào mcp_server.py và trả về kết quả cập nhật rõ ràng",
     "status": "completed",
-    "activeForm": "Rà soát đảm bảo build_profile và các tool khác không bị lỗi khi thêm người mới"
+    "activeForm": "Thêm tool update_person vào mcp_server.py và trả về kết quả cập nhật rõ ràng"
   }
 ]
