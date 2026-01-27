@@ -518,6 +518,58 @@ def get_address(name: str):
 
 
 @mcp.tool()
+def update_person(name: str, field: str, new_value: str):
+    """Cập nhật email/phone/address cho người đã có."""
+    key = find_person_key(name)
+    if not key:
+        return "Không có dữ liệu được lưu trữ"
+
+    normalized_field = normalize_text(field)
+    field_aliases = {
+        "email": "email",
+        "e mail": "email",
+        "e-mail": "email",
+        "mail": "email",
+        "phone": "phone",
+        "phone number": "phone",
+        "sdt": "phone",
+        "so dt": "phone",
+        "so dien thoai": "phone",
+        "dien thoai": "phone",
+        "address": "address",
+        "dia chi": "address",
+        "dc": "address",
+    }
+    field_key = field_aliases.get(normalized_field)
+    if not field_key:
+        return {
+            "message": "Trường cần cập nhật không hợp lệ.",
+            "field": field,
+            "allowed_fields": ["email", "phone", "address"],
+        }
+
+    value = "" if new_value is None else str(new_value).strip()
+    if not value:
+        return {"message": "Giá trị mới không hợp lệ.", "field": field_key}
+
+    person = PEOPLE[key]
+    old_value = person.get(field_key, "")
+    person[field_key] = value
+
+    return {
+        "person": key,
+        "field": field_key,
+        "old_value": old_value,
+        "new_value": value,
+        "contact_info": {
+            "email": person.get("email", ""),
+            "phone": person.get("phone", ""),
+            "address": person.get("address", ""),
+        },
+    }
+
+
+@mcp.tool()
 def get_occupation(name: str):
     """Get occupation/job of a person."""
     key = find_person_key(name)
