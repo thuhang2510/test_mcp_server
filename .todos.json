@@ -1,17 +1,17 @@
 [
   {
-    "content": "Rà soát dữ liệu ngày sinh và các tool hiện có trong mcp_server.py",
+    "content": "Rà soát mcp_server để xác định vị trí thêm tool trả về tuổi hiện tại",
     "status": "completed",
-    "activeForm": "Rà soát dữ liệu ngày sinh và các tool hiện có trong mcp_server.py"
+    "activeForm": "Rà soát mcp_server để xác định vị trí thêm tool trả về tuổi hiện tại"
   },
   {
-    "content": "Thiết kế hàm định dạng dd/mm và tool trả về ngày sinh theo tên",
+    "content": "Thiết kế logic tính tuổi hiện tại dựa trên ngày sinh và thời điểm hiện tại",
     "status": "completed",
-    "activeForm": "Thiết kế hàm định dạng dd/mm và tool trả về ngày sinh theo tên"
+    "activeForm": "Thiết kế logic tính tuổi hiện tại dựa trên ngày sinh và thời điểm hiện tại"
   },
   {
-    "content": "Chèn thay đổi tối thiểu vào mcp_server.py và đảm bảo trả về đúng định dạng",
+    "content": "Thêm tool get_current_age vào mcp_server và đảm bảo phản hồi nhất quán",
     "status": "completed",
-    "activeForm": "Chèn thay đổi tối thiểu vào mcp_server.py và đảm bảo trả về đúng định dạng"
+    "activeForm": "Thêm tool get_current_age vào mcp_server và đảm bảo phản hồi nhất quán"
   }
 ]
