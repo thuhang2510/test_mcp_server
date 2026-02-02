@@ -763,30 +763,176 @@ def _normalize_fields(fields: Optional[List[str]]) -> Optional[List[str]]:
     return out or None
 
 
+def _normalize_sort_field(sort_by: Optional[str]) -> Optional[str]:
+    if not sort_by:
+        return None
+    key = str(sort_by).strip().lower()
+    return key if key in SEARCHABLE_FIELDS else None
+
+
+def _coerce_number(value) -> Optional[float]:
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return None
+    try:
+        return float(value)
+    except Exception:
+        return None
+
+
+def _match_filter_value(field_value, criteria) -> bool:
+    if criteria is None:
+        return True
+
+    if isinstance(criteria, (list, tuple, set)):
+        return any(_match_filter_value(field_value, item) for item in criteria)
+
+    if isinstance(criteria, dict):
+        numeric_value = _coerce_number(field_value)
+        min_value = criteria.get("min")
+        max_value = criteria.get("max")
+        exact_value = criteria.get("value")
+
+        if numeric_value is not None and (min_value is not None or max_value is not None):
+            if min_value is not None:
+                min_number = _coerce_number(min_value)
+                if min_number is not None and numeric_value < min_number:
+                    return False
+            if max_value is not None:
+                max_number = _coerce_number(max_value)
+                if max_number is not None and numeric_value > max_number:
+                    return False
+            return True
+
+        if exact_value is not None:
+            return _match_filter_value(field_value, exact_value)
+
+        # If no valid range/value provided, treat as non-match.
+        return False
+
+    numeric_value = _coerce_number(field_value)
+    numeric_criteria = _coerce_number(criteria)
+    if numeric_value is not None and numeric_criteria is not None:
+        return numeric_value == numeric_criteria
+
+    hay = normalize_text(field_value)
+    needle = normalize_text(criteria)
+    if needle == "":
+        return True
+    return needle in hay
+
+
+def _normalize_filters(filters: Optional[dict]) -> Optional[dict]:
+    if not filters or not isinstance(filters, dict):
+        return None
+    applied: dict = {}
+    for key, criteria in filters.items():
+        if not key:
+            continue
+        field_key = str(key).strip().lower()
+        if field_key in SEARCHABLE_FIELDS:
+            applied[field_key] = criteria
+    return applied or None
+
+
+def _apply_filters(field_value_map: dict, filters: Optional[dict]) -> bool:
+    if not filters:
+        return True
+    for key, criteria in filters.items():
+        if not _match_filter_value(field_value_map.get(key, ""), criteria):
+            return False
+    return True
+
+
+def _sort_value(raw_value):
+    if raw_value is None:
+        return (1, "")
+    numeric_value = _coerce_number(raw_value)
+    if numeric_value is not None:
+        return (0, numeric_value)
+    return (0, normalize_text(raw_value))
+
+
+def _collect_suggestions(
+    query: str,
+    profile_entries: List[dict],
+    fields: Optional[List[str]],
+    limit: int,
+) -> List[str]:
+    needle = normalize_text(query)
+    if needle == "":
+        return []
+
+    try:
+        limit_i = int(limit)
+    except Exception:
+        limit_i = 5
+    if limit_i <= 0:
+        limit_i = 5
+    limit_i = min(limit_i, 20)
+
+    fields_to_use = fields or list(SEARCHABLE_FIELDS)
+    suggestions: List[str] = []
+    seen = set()
+
+    for entry in profile_entries:
+        field_value_map = entry.get("fields", {})
+        for field in fields_to_use:
+            raw_value = field_value_map.get(field, "")
+            if raw_value is None:
+                continue
+            candidate = str(raw_value).strip()
+            if not candidate:
+                continue
+            candidate_norm = normalize_text(candidate)
+            if needle in candidate_norm and candidate_norm != needle and candidate_norm not in seen:
+                seen.add(candidate_norm)
+                suggestions.append(candidate)
+                if len(suggestions) >= limit_i:
+                    return suggestions
+
+    return suggestions
+
+
 @mcp.tool()
 def search_people(
     query: str,
     fields: Optional[List[str]] = None,
     include_profiles: bool = False,
     limit: int = 10,
+    filters: Optional[dict] = None,
+    sort_by: Optional[str] = None,
+    sort_order: str = "asc",
+    suggest_limit: int = 5,
+    suggest_fields: Optional[List[str]] = None,
 ):
     """Search people by a free-text query.
 
     - Mặc định sẽ search trên tất cả field phổ biến (name, hobby, quote, ...).
     - Search không phân biệt hoa/thường và có hỗ trợ bỏ dấu (để match dễ hơn).
+    - Hỗ trợ lọc theo field, sắp xếp kết quả và gợi ý từ khóa.
 
     Args:
         query: Chuỗi cần tìm.
         fields: Danh sách field muốn search (vd: ["name", "hobby"]). Nếu None -> search all.
         include_profiles: True -> trả về full profile; False -> chỉ trả về danh sách tên.
         limit: Giới hạn số kết quả trả về.
+        filters: Dict field -> giá trị lọc (vd: {"age": 18} hoặc {"age": {"min": 18}}).
+        sort_by: Field cần sắp xếp (vd: "age", "name").
+        sort_order: "asc" hoặc "desc".
+        suggest_limit: Giới hạn số gợi ý từ khóa.
+        suggest_fields: Field dùng để gợi ý (mặc định theo fields/searchable).
 
     Returns:
-        Dict gồm query, count, people và matches (matched_fields theo từng người).
+        Dict gồm query, count, people, matches, filters, sort_by, sort_order, suggestions.
     """
 
     needle = normalize_text(query)
     normalized_fields = _normalize_fields(fields)
+    normalized_filters = _normalize_filters(filters)
+    sort_field = _normalize_sort_field(sort_by)
+    suggest_fields_norm = _normalize_fields(suggest_fields) or normalized_fields
 
     # clamp limit to avoid returning too much data
     try:
@@ -797,7 +943,12 @@ def search_people(
         limit_i = 10
     limit_i = min(limit_i, 50)
 
+    sort_order_norm = str(sort_order).strip().lower() if sort_order is not None else "asc"
+    sort_desc = sort_order_norm in {"desc", "descending", "giam", "giam dan", "giamdan"}
+
     matches: List[dict] = []
+    profile_entries: List[dict] = []
+    fields_to_search = normalized_fields or list(SEARCHABLE_FIELDS)
 
     for name in sorted(PEOPLE.keys()):
         profile = build_profile(name)
@@ -823,7 +974,7 @@ def search_people(
             "family": family_text,
         }
 
-        fields_to_search = normalized_fields or list(SEARCHABLE_FIELDS)
+        profile_entries.append({"profile": profile, "fields": field_value_map})
 
         matched_fields: List[str] = []
 
@@ -836,30 +987,44 @@ def search_people(
                 if needle and needle in hay:
                     matched_fields.append(f)
 
-        if matched_fields:
-            matches.append({
-                "name": name,
-                "matched_fields": sorted(set(matched_fields)),
-                "profile": profile,
-            })
+        if not matched_fields:
+            continue
 
-        if len(matches) >= limit_i:
-            break
+        if not _apply_filters(field_value_map, normalized_filters):
+            continue
+
+        matches.append({
+            "name": name,
+            "matched_fields": sorted(set(matched_fields)),
+            "profile": profile,
+            "fields": field_value_map,
+        })
+
+    if sort_field:
+        matches.sort(key=lambda m: _sort_value(m["fields"].get(sort_field)), reverse=sort_desc)
+
+    matches = matches[:limit_i]
 
     if include_profiles:
         people_out = [m["profile"] for m in matches]
     else:
         people_out = [m["name"] for m in matches]
 
+    suggestions = _collect_suggestions(query, profile_entries, suggest_fields_norm, suggest_limit)
+
     return {
         "query": query,
         "fields": normalized_fields or sorted(SEARCHABLE_FIELDS),
+        "filters": normalized_filters or {},
+        "sort_by": sort_field,
+        "sort_order": sort_order_norm if sort_field else None,
         "count": len(matches),
         "limit": limit_i,
         "people": people_out,
         "matches": [
             {"name": m["name"], "matched_fields": m["matched_fields"]} for m in matches
         ],
+        "suggestions": suggestions,
     }
 
 

@@ -1,17 +1,17 @@
 [
   {
-    "content": "Rà soát dữ liệu ngày sinh và các tool hiện có trong mcp_server.py",
+    "content": "Thiết kế mở rộng search_people cho lọc, sắp xếp và gợi ý từ khóa",
     "status": "completed",
-    "activeForm": "Rà soát dữ liệu ngày sinh và các tool hiện có trong mcp_server.py"
+    "activeForm": "Thiết kế mở rộng search_people cho lọc, sắp xếp và gợi ý từ khóa"
   },
   {
-    "content": "Thiết kế hàm định dạng dd/mm và tool trả về ngày sinh theo tên",
+    "content": "Cập nhật mcp_server.py: thêm tham số filters/sort/suggestions và logic xử lý",
     "status": "completed",
-    "activeForm": "Thiết kế hàm định dạng dd/mm và tool trả về ngày sinh theo tên"
+    "activeForm": "Cập nhật mcp_server.py: thêm tham số filters/sort/suggestions và logic xử lý"
   },
   {
-    "content": "Chèn thay đổi tối thiểu vào mcp_server.py và đảm bảo trả về đúng định dạng",
+    "content": "Rà soát phản hồi trả về để giữ tương thích ngược",
     "status": "completed",
-    "activeForm": "Chèn thay đổi tối thiểu vào mcp_server.py và đảm bảo trả về đúng định dạng"
+    "activeForm": "Rà soát phản hồi trả về để giữ tương thích ngược"
   }
 ]
