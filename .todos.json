@@ -1,17 +1,17 @@
 [
   {
-    "content": "Thiết kế mở rộng search_people cho lọc, sắp xếp và gợi ý từ khóa",
+    "content": "Run read-only tool checks (read_todos, glob, grep, read_file).",
     "status": "completed",
-    "activeForm": "Thiết kế mở rộng search_people cho lọc, sắp xếp và gợi ý từ khóa"
+    "activeForm": "Running read-only tool checks (read_todos, glob, grep, read_file)"
   },
   {
-    "content": "Cập nhật mcp_server.py: thêm tham số filters/sort/suggestions và logic xử lý",
+    "content": "Run file modification tool checks (write_file, edit_file).",
     "status": "completed",
-    "activeForm": "Cập nhật mcp_server.py: thêm tham số filters/sort/suggestions và logic xử lý"
+    "activeForm": "Running file modification tool checks (write_file, edit_file)"
   },
   {
-    "content": "Rà soát phản hồi trả về để giữ tương thích ngược",
+    "content": "Run execution/utility tool checks (bash, bash_output, list_bash, kill_bash, task).",
     "status": "completed",
-    "activeForm": "Rà soát phản hồi trả về để giữ tương thích ngược"
+    "activeForm": "Running execution/utility tool checks (bash, bash_output, list_bash, kill_bash, task)"
   }
 ]
