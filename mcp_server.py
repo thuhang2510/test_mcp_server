@@ -1175,15 +1175,6 @@ def get_current_time(tz: str = "Asia/Ho_Chi_Minh", fmt: str = "%Y-%m-%d %H:%M:%S
     }
 
 
-@mcp.tool()
-def health_check():
-    """Health check endpoint for monitoring."""
-    now = datetime.now().astimezone()
-    return {
-        "status": "ok",
-        "checked_at": now.isoformat(),
-    }
-
 
 # if __name__ == "__main__":
 #     # Chỉ cần run trực tiếp, FastMCP Cloud sẽ quản lý asyncio loop
