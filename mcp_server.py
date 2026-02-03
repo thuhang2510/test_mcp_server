@@ -326,16 +326,6 @@ def build_profile(name: str):
 
 
 @mcp.tool()
-def health_check():
-    """Health check endpoint for the MCP server."""
-    return {
-        "status": "ok",
-        "service": "info",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
-    }
-
-
-@mcp.tool()
 def get_info(name: str):
     """
     Get info of name includes: age, birthday, zodiac
