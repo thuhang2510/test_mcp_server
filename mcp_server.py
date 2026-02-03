@@ -106,6 +106,28 @@ def normalize_text(text: str) -> str:
     return s
 
 
+def _normalize_city_text(text: str) -> str:
+    if text is None:
+        return ""
+    normalized = normalize_text(text)
+    normalized = re.sub(r"[^\w\s]", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    return normalized
+
+
+def _extract_city_from_address(address: str) -> str:
+    if not address:
+        return ""
+    parts = [p.strip() for p in str(address).split(",") if p.strip()]
+    if not parts:
+        return ""
+    if len(parts) >= 2:
+        last_norm = normalize_text(parts[-1])
+        if last_norm in {"viet nam", "vietnam"}:
+            return parts[-2]
+    return parts[-1]
+
+
 def find_person_key(name: str):
     needle = normalize_name(name)
     for key in PEOPLE:
@@ -542,6 +564,57 @@ def get_address(name: str):
             "address": person.get("address", ""),
         }
     return "Không có dữ liệu được lưu trữ"
+
+
+@mcp.tool()
+def find_people_by_city(city: str, include_profiles: bool = False, limit: int = 10):
+    """Find people by city extracted from their address."""
+    if city is None:
+        return {
+            "city": "",
+            "normalized_city": "",
+            "count": 0,
+            "people": [],
+        }
+
+    city_norm = _normalize_city_text(city)
+    if not city_norm:
+        return {
+            "city": city,
+            "normalized_city": "",
+            "count": 0,
+            "people": [],
+        }
+
+    try:
+        limit_i = int(limit)
+    except Exception:
+        limit_i = 10
+    if limit_i <= 0:
+        limit_i = 10
+    limit_i = min(limit_i, 50)
+
+    matches = []
+    for name in sorted(PEOPLE.keys()):
+        profile = build_profile(name)
+        address = profile.get("address", "")
+        city_from_address = _extract_city_from_address(address)
+        city_from_address_norm = _normalize_city_text(city_from_address)
+        if not city_from_address_norm:
+            continue
+        if city_norm not in city_from_address_norm:
+            continue
+        matches.append(profile if include_profiles else name)
+        if len(matches) >= limit_i:
+            break
+
+    return {
+        "city": city,
+        "normalized_city": city_norm,
+        "count": len(matches),
+        "limit": limit_i,
+        "people": matches,
+    }
 
 
 @mcp.tool()
