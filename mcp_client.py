@@ -88,13 +88,23 @@ async def main():
             while True:
                 try:
                     query = input("\nQuery: ").strip()
-                    
-                    if query.lower() == 'quit':
+
+                    if not query:
+                        continue
+
+                    query_normalized = query.lower()
+
+                    if query_normalized == 'quit':
                         break
-                        
+
+                    if query_normalized in {'health', 'health_check', 'health-check', 'ping', 'status'}:
+                        result = await session.call_tool("health_check", {})
+                        print("\n" + result.content)
+                        continue
+
                     response = await process_query(session, query)
                     print("\n" + response)
-                        
+
                 except Exception as e:
                     print(f"\nError: {str(e)}")
 
