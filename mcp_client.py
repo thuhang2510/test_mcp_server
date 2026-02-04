@@ -83,7 +83,7 @@ async def main():
         async with ClientSession(*streams) as session:
             await session.initialize()
             print("\nMCP Client Started!")
-            print("Type your queries, 'health', or 'quit' to exit.")
+            print("Type your queries or 'quit' to exit.")
             
             while True:
                 try:
@@ -91,11 +91,6 @@ async def main():
                     
                     if query.lower() == 'quit':
                         break
-
-                    if query.lower() == 'health':
-                        result = await session.call_tool("health_check", {})
-                        print("\n" + str(result.content))
-                        continue
                         
                     response = await process_query(session, query)
                     print("\n" + response)
