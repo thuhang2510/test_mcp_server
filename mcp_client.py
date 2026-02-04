@@ -80,12 +80,14 @@ async def process_query(session, query):
 
 
 async def run_health_check(session) -> Optional[str]:
-    """Invoke the MCP health_check tool directly."""
+    """Invoke the MCP health check tool directly."""
     response = await session.list_tools()
-    health_tool = next((tool for tool in response.tools if tool.name == "health_check"), None)
+    health_tool = next(
+        (tool for tool in response.tools if tool.name in {"health_check", "health"}), None
+    )
     if health_tool is None:
         return "Health check tool not available."
-    result = await session.call_tool("health_check", {})
+    result = await session.call_tool(health_tool.name, {})
     return result.content
 
 async def main():
