@@ -1175,16 +1175,6 @@ def get_current_time(tz: str = "Asia/Ho_Chi_Minh", fmt: str = "%Y-%m-%d %H:%M:%S
     }
 
 
-@mcp.tool()
-def health_check():
-    """Health check cho MCP server."""
-    now = datetime.now().astimezone()
-    return {
-        "status": "ok",
-        "service": "mcp",
-        "server": mcp.name,
-        "timestamp": now.isoformat(),
-    }
 
 
 
