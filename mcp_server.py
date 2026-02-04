@@ -1144,21 +1144,6 @@ def get_compatibility(name_a: str, name_b: str):
 
 
 @mcp.tool()
-def health_check():
-    """Health check endpoint.
-
-    Returns:
-        Dict gồm status và thời gian hiện tại theo ISO-8601.
-    """
-    now = datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
-    return {
-        "status": "ok",
-        "service": "info",
-        "timestamp": now,
-    }
-
-
-@mcp.tool()
 def get_current_time(tz: str = "Asia/Ho_Chi_Minh", fmt: str = "%Y-%m-%d %H:%M:%S"):
     """Lấy giờ hiện tại.
 
