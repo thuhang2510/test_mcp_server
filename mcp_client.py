@@ -78,6 +78,16 @@ async def process_query(session, query):
 
     return "\n".join(final_text)
 
+
+async def run_health_check(session) -> Optional[str]:
+    """Invoke the MCP health_check tool directly."""
+    response = await session.list_tools()
+    health_tool = next((tool for tool in response.tools if tool.name == "health_check"), None)
+    if health_tool is None:
+        return "Health check tool not available."
+    result = await session.call_tool("health_check", {})
+    return result.content
+
 async def main():
     async with sse_client("http://127.0.0.1:8000/sse") as streams:
         async with ClientSession(*streams) as session:
@@ -88,13 +98,18 @@ async def main():
             while True:
                 try:
                     query = input("\nQuery: ").strip()
-                    
+
                     if query.lower() == 'quit':
                         break
-                        
+
+                    if query.lower() in {"health", "/health", "health_check", "health-check"}:
+                        response = await run_health_check(session)
+                        print("\n" + (response or ""))
+                        continue
+
                     response = await process_query(session, query)
                     print("\n" + response)
-                        
+
                 except Exception as e:
                     print(f"\nError: {str(e)}")
 
