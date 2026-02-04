@@ -2,6 +2,7 @@ from mcp import ClientSession
 from mcp.client.sse import sse_client
 
 import asyncio
+import sys
 from typing import Optional
 from contextlib import AsyncExitStack
 
@@ -79,6 +80,9 @@ async def process_query(session, query):
     return "\n".join(final_text)
 
 
+HEALTH_COMMANDS = {"health", "/health", "health_check", "health-check"}
+
+
 async def run_health_check(session) -> Optional[str]:
     """Invoke the MCP health check tool directly."""
     response = await session.list_tools()
@@ -90,10 +94,28 @@ async def run_health_check(session) -> Optional[str]:
     result = await session.call_tool(health_tool.name, {})
     return result.content
 
-async def main():
+
+async def maybe_handle_health_command(session, command: str) -> Optional[str]:
+    """Handle health commands if the input matches supported tokens."""
+    if command is None:
+        return None
+    normalized = str(command).strip().lower()
+    if normalized in HEALTH_COMMANDS:
+        return await run_health_check(session)
+    return None
+
+async def main(argv: Optional[list[str]] = None):
+    args = argv or sys.argv[1:]
+    command = args[0] if args else None
     async with sse_client("http://127.0.0.1:8000/sse") as streams:
         async with ClientSession(*streams) as session:
             await session.initialize()
+
+            health_response = await maybe_handle_health_command(session, command) if command else None
+            if health_response is not None:
+                print(health_response)
+                return
+
             print("\nMCP Client Started!")
             print("Type your queries or 'quit' to exit.")
             
@@ -101,12 +123,12 @@ async def main():
                 try:
                     query = input("\nQuery: ").strip()
 
-                    if query.lower() == 'quit':
+                    if query.lower() == "quit":
                         break
 
-                    if query.lower() in {"health", "/health", "health_check", "health-check"}:
-                        response = await run_health_check(session)
-                        print("\n" + (response or ""))
+                    health_response = await maybe_handle_health_command(session, query)
+                    if health_response is not None:
+                        print("\n" + (health_response or ""))
                         continue
 
                     response = await process_query(session, query)
