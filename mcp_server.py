@@ -1144,19 +1144,6 @@ def get_compatibility(name_a: str, name_b: str):
 
 
 @mcp.tool()
-def health_check():
-    """Simple health check for the MCP service."""
-    now = datetime.now().astimezone()
-    return {"status": "ok", "timestamp": now.isoformat()}
-
-
-@mcp.tool()
-def health():
-    """Alias for health_check."""
-    return health_check()
-
-
-@mcp.tool()
 def get_current_time(tz: str = "Asia/Ho_Chi_Minh", fmt: str = "%Y-%m-%d %H:%M:%S"):
     """Lấy giờ hiện tại.
 
